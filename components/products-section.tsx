@@ -87,7 +87,7 @@ const products = [
     id: 10,
     name: "Complete Solar Kit (Home)",
     description: "Everything you need for home solar installation",
-    image: "/placeholder.svg?height=300&width=400",
+    image: "/solar-kits.jpg",
     price: 8500,
     specs: "5kW system | Full installation included",
   },

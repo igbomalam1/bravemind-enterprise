@@ -72,7 +72,11 @@ export function Navbar() {
 
         {/* Mobile Navigation */}
         <div
-          className={cn("md:hidden overflow-hidden transition-all duration-300", isOpen ? "max-h-64 pb-4" : "max-h-0")}
+          className={cn(
+            "md:hidden overflow-hidden transition-all duration-300",
+            isOpen ? "max-h-64 pb-4" : "max-h-0"
+          )}
+          style={{ background: isOpen ? "rgba(20, 20, 20, 0.98)" : "transparent", backdropFilter: isOpen ? "blur(8px)" : "none" }}
         >
           <div className="flex flex-col gap-2 pt-2">
             {navLinks.map((link) => (
