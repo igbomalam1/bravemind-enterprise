@@ -1,0 +1,27 @@
+node_modules/
+.next/
+out/
+dist/
+.vercel/
+.cache/
+
+# env and local config
+.env
+.env.*
+.env.local
+.env.production
+.env.development
+
+# OS and editor junk
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Vite/Parcel/etc
+.parcel-cache/
