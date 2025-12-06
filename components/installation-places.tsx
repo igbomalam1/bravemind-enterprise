@@ -7,19 +7,19 @@ const places = [
   {
     name: "Residential Homes",
     description: "Reduce your home's electricity bills with rooftop solar installations",
-    image: "/modern-suburban-house-with-solar-panels-on-roof-su.jpg",
+    image: "/residential-solar-powered-building.jpg",
     icon: Home,
   },
   {
     name: "Commercial Offices",
     description: "Power your business operations with sustainable solar energy",
-    image: "/contemporary-office-building-with-solar-panel-arra.jpg",
+    image: "/commercial-offices.jpg",
     icon: Building2,
   },
   {
-    name: "Agricultural Farms",
-    description: "Affordable solar solutions for irrigation and farm operations",
-    image: "/large-agricultural-farm-with-solar-panel-installat.jpg",
+    name: "Solar powered borewhole",
+    description: "Affordable solar solutions for irrigation and borehole operations",
+    image: "/water-powered-solar-projects.jpg",
     icon: Tractor,
   },
   {
@@ -31,7 +31,7 @@ const places = [
   {
     name: "Community Centers",
     description: "Powering community facilities with clean renewable energy",
-    image: "/traditional-church-building-with-modern-solar-pane.jpg",
+    image: "/community-centre.jpg",
     icon: Building2,
   },
 ]
@@ -62,6 +62,10 @@ export function InstallationPlaces() {
                     src={place.image || "/placeholder.svg"}
                     alt={place.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    onError={(e) => {
+                      const img = e.currentTarget as HTMLImageElement
+                      img.src = "/placeholder.svg"
+                    }}
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent" />
@@ -90,6 +94,10 @@ export function InstallationPlaces() {
                         src={lastPlace.image || "/placeholder.svg"}
                         alt={lastPlace.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onError={(e) => {
+                          const img = e.currentTarget as HTMLImageElement
+                          img.src = "/placeholder.svg"
+                        }}
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent" />

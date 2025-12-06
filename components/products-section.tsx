@@ -8,93 +8,19 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { ShoppingCart, CheckCircle } from "lucide-react"
+import { CheckCircle } from "lucide-react"
+import Link from "next/link"
+import Image from "next/image"
+import { products } from "@/lib/products"
+import { formatNaira, discountPercent } from "@/lib/utils"
+import { Spinner } from "@/components/ui/spinner"
 
-const products = [
-  {
-    id: 1,
-    name: "Monocrystalline Solar Panels",
-    description: "High-efficiency panels for maximum power output",
-    image: "/high-efficiency-monocrystalline-solar-panel-black-.jpg",
-    price: 450,
-    specs: "400W | 25-year warranty",
-  },
-  {
-    id: 2,
-    name: "Polycrystalline Solar Panels",
-    description: "Cost-effective panels for budget-conscious installations",
-    image: "/blue-polycrystalline-solar-panel-product-photograp.jpg",
-    price: 380,
-    specs: "350W | 20-year warranty",
-  },
-  {
-    id: 3,
-    name: "Solar Battery Storage (10kWh)",
-    description: "Store excess energy for nighttime use",
-    image: "/modern-wall-mounted-solar-battery-system-sleek-whi.jpg",
-    price: 3500,
-    specs: "10kWh capacity | Smart app control",
-  },
-  {
-    id: 4,
-    name: "Solar Battery Storage (20kWh)",
-    description: "Commercial-grade storage for larger systems",
-    image: "/large-commercial-solar-battery-storage-unit-indust.jpg",
-    price: 6200,
-    specs: "20kWh capacity | Commercial grade",
-  },
-  {
-    id: 5,
-    name: "Solar CCTV Camera System",
-    description: "24/7 security powered by the sun",
-    image: "/outdoor-solar-powered-cctv-camera-white-housing-sm.jpg",
-    price: 280,
-    specs: "1080p HD | Night vision | WiFi",
-  },
-  {
-    id: 6,
-    name: "Solar Inverter (5kW)",
-    description: "Convert DC to AC power efficiently",
-    image: "/modern-solar-inverter-mounted-on-wall-digital-disp.jpg",
-    price: 1200,
-    specs: "5kW hybrid | MPPT technology",
-  },
-  {
-    id: 7,
-    name: "Solar Water Heater",
-    description: "Hot water all year round, naturally",
-    image: "/rooftop-solar-water-heating-system-evacuated-tubes.jpg",
-    price: 850,
-    specs: "200L capacity | All-weather",
-  },
-  {
-    id: 8,
-    name: "Solar Street Light",
-    description: "Illuminate streets without grid power",
-    image: "/tall-solar-powered-led-street-light-integrated-pan.jpg",
-    price: 420,
-    specs: "100W LED | Auto on/off",
-  },
-  {
-    id: 9,
-    name: "Solar Charge Controller",
-    description: "Protect your batteries with smart charging",
-    image: "/mppt-solar-charge-controller-lcd-screen-multiple-c.jpg",
-    price: 180,
-    specs: "60A MPPT | LCD display",
-  },
-  {
-    id: 10,
-    name: "Complete Solar Kit (Home)",
-    description: "Everything you need for home solar installation",
-    image: "/solar-kits.jpg",
-    price: 8500,
-    specs: "5kW system | Full installation included",
-  },
-]
 
 export function ProductsSection() {
   const [selectedProduct, setSelectedProduct] = useState<(typeof products)[0] | null>(null)
+  const [galleryProduct, setGalleryProduct] = useState<(typeof products)[0] | null>(null)
+  const [activeImageIdx, setActiveImageIdx] = useState(0)
+  const [imageLoading, setImageLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -161,27 +87,66 @@ export function ProductsSection() {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
+          {(() => {
+            const byPriceAsc = (a: (typeof products)[0], b: (typeof products)[0]) => a.discountedPrice - b.discountedPrice
+            const under500 = products.filter((p) => p.discountedPrice < 500000 && p.id !== 5).sort(byPriceAsc).slice(0, 2)
+            const mid800To2m = products.filter((p) => p.discountedPrice >= 800000 && p.discountedPrice <= 2000000).sort(byPriceAsc).slice(0, 2)
+            const high4To17m = products.filter((p) => p.discountedPrice >= 4000000 && p.discountedPrice <= 17000000).sort(byPriceAsc).slice(0, 1)
+            const cctv = products.find((p) => p.id === 5)
+            const selection = [...under500, ...mid800To2m, ...high4To17m, ...(cctv ? [cctv] : [])]
+            const unique = Array.from(new Map(selection.map((p) => [p.id, p])).values())
+            let six = unique.slice(0, 6)
+            const preferred = six.find((p) => p.images.length === 3) || products.find((p) => p.images.length === 3)
+            if (preferred) {
+              const rest = six.filter((p) => p.id !== preferred.id)
+              six = [preferred, ...rest].slice(0, 6)
+            }
+            return six
+          })().map((product) => (
             <Card
               key={product.id}
               className="group overflow-hidden border border-border hover:border-accent/50 hover:shadow-lg transition-all duration-300"
             >
               <CardContent className="p-0">
-                <div className="aspect-[4/3] overflow-hidden bg-muted">
-                  <img
+                <button
+                  type="button"
+                  aria-label={`Open image gallery for ${product.name}`}
+                  onClick={() => {
+                    setGalleryProduct(product)
+                    setActiveImageIdx(0)
+                  }}
+                  className="aspect-[4/3] overflow-hidden bg-muted w-full"
+                >
+                  <Image
                     src={product.image || "/placeholder.svg"}
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    width={800}
+                    height={600}
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="/placeholder.jpg"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
-                </div>
+                </button>
                 <div className="p-5">
-                  <h3 className="text-lg font-bold text-foreground mb-1">{product.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-3">{product.description}</p>
+                  <h3 className="text-lg font-bold text-foreground mb-1 line-clamp-2 break-words">{product.name}</h3>
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2 break-words">{product.description}</p>
                   <div className="flex items-center gap-2 mb-3">
                     <CheckCircle className="w-4 h-4 text-accent" />
                     <span className="text-sm text-muted-foreground">{product.specs}</span>
                   </div>
-                  
+                  <div className="flex items-center gap-3">
+                    <span className="text-muted-foreground line-through">
+                      {formatNaira(product.originalPrice)}
+                    </span>
+                    <span className="text-foreground font-bold text-xl">
+                      {formatNaira(product.discountedPrice)}
+                    </span>
+                    <span className="text-accent font-semibold">
+                      {(product.discountPercentListed ?? discountPercent(product.originalPrice, product.discountedPrice))}% OFF
+                    </span>
+                  </div>
                 </div>
               </CardContent>
               <CardFooter className="p-5 pt-0">
@@ -189,12 +154,17 @@ export function ProductsSection() {
                   onClick={() => setSelectedProduct(product)}
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
-                  <ShoppingCart className="w-4 h-4 mr-2" />
                   Make Enquiries
                 </Button>
               </CardFooter>
             </Card>
           ))}
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <Link href="/products" aria-label="View more products">
+            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">View More Products</Button>
+          </Link>
         </div>
       </div>
 
@@ -203,7 +173,6 @@ export function ProductsSection() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5 text-accent" />
               Make Enquiries
             </DialogTitle>
             <DialogDescription>
@@ -216,10 +185,15 @@ export function ProductsSection() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Product Summary */}
               <div className="flex items-center gap-4 p-3 bg-muted rounded-lg">
-                <img
+                <Image
                   src={selectedProduct.image || "/placeholder.svg"}
                   alt={selectedProduct.name}
                   className="w-16 h-16 object-cover rounded-md"
+                  width={64}
+                  height={64}
+                  loading="lazy"
+                  placeholder="blur"
+                  blurDataURL="/placeholder.jpg"
                 />
                 <div>
                   <p className="font-medium text-sm">{selectedProduct.name}</p>
@@ -273,6 +247,67 @@ export function ProductsSection() {
                 Send Enquiry via WhatsApp
               </Button>
             </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Gallery Modal */}
+      <Dialog open={!!galleryProduct} onOpenChange={() => setGalleryProduct(null)}>
+        <DialogContent className="sm:max-w-3xl" aria-label="Product image gallery">
+          <DialogHeader>
+            <DialogTitle>Image Gallery</DialogTitle>
+            <DialogDescription>
+              {galleryProduct && galleryProduct.name}
+            </DialogDescription>
+          </DialogHeader>
+          {galleryProduct && (
+            <div className="space-y-4">
+              <div className="relative min-w-[600px] mx-auto">
+                {imageLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/10">
+                    <Spinner className="text-foreground" />
+                  </div>
+                )}
+                <Image
+                  src={(galleryProduct.images[activeImageIdx] || galleryProduct.image) ?? "/placeholder.svg"}
+                  alt={`${galleryProduct.name} preview ${activeImageIdx + 1}`}
+                  width={1200}
+                  height={800}
+                  className="w-full h-auto rounded-md"
+                  loading="lazy"
+                  placeholder="blur"
+                  blurDataURL="/placeholder.jpg"
+                  onLoadingComplete={() => setImageLoading(false)}
+                  onLoad={() => setImageLoading(true)}
+                  sizes="(max-width: 768px) 100vw, 1200px"
+                />
+              </div>
+              <div className="flex items-center justify-center gap-3">
+                {galleryProduct.images.map((src, idx) => (
+                  <button
+                    key={src}
+                    type="button"
+                    aria-label={`View thumbnail ${idx + 1} for ${galleryProduct.name}`}
+                    onClick={() => {
+                      setActiveImageIdx(idx)
+                      setImageLoading(true)
+                    }}
+                    className={"border rounded-md overflow-hidden"}
+                  >
+                    <Image
+                      src={src}
+                      alt={`${galleryProduct.name} thumbnail ${idx + 1}`}
+                      width={150}
+                      height={150}
+                      className="object-cover"
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL="/placeholder.jpg"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
         </DialogContent>
       </Dialog>

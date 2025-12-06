@@ -19,7 +19,7 @@ export function AboutSection() {
                 communities across Nigeria.
               </p>
               <p className="text-pretty">
-                With over 10 years of experience and 500+ successful installations, we provide premium solar panels,
+                With over 10 years of experience and 110+ successful installations, we provide premium solar panels,
                 batteries, CCTV systems, and complete energy solutions. Our certified technicians ensure professional
                 installation and ongoing support for all our clients.
               </p>

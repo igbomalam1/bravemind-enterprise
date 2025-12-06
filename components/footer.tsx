@@ -17,10 +17,10 @@ const productLinks = [
 ]
 
 const socialLinks = [
-  { name: "Facebook", icon: Facebook, href: "#" },
-  { name: "Twitter", icon: Twitter, href: "#" },
-  { name: "Instagram", icon: Instagram, href: "#" },
-  { name: "LinkedIn", icon: Linkedin, href: "#" },
+  { name: "Facebook", icon: Facebook, href: "https://facebook.com/bravemindenterprise", username: "@bravemindenterprise" },
+  { name: "Twitter (X)", icon: Twitter, href: "https://x.com/bravemindenter", username: "@bravemindenter" },
+  { name: "Instagram", icon: Instagram, href: "https://instagram.com/bravemindenterprise", username: "@bravemindenterprise" },
+  { name: "LinkedIn", icon: Linkedin, href: "https://linkedin.com/company/bravemindenterprise", username: "@bravemindenterprise" },
 ]
 
 export function Footer() {
@@ -40,12 +40,13 @@ export function Footer() {
               Powering Tomorrow, Today. Your trusted partner for clean, sustainable solar energy solutions across
               Nigeria.
             </p>
-            {/* Social Links */}
             <div className="flex gap-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-lg bg-primary-foreground/10 hover:bg-accent hover:text-accent-foreground flex items-center justify-center transition-colors"
                   aria-label={social.name}
                 >
