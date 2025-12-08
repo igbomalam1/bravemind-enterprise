@@ -64,7 +64,7 @@ export function AboutSection() {
                 <div className="flex items-start gap-3 text-muted-foreground flex-wrap">
                   <Phone className="w-5 h-5 text-accent mt-1" />
                   <div className="flex flex-wrap gap-2">
-                    <a href="tel:+2347039363154" className="hover:text-accent">07039363154</a>
+                    <a href="tel:+2347033963154" className="hover:text-accent">07033963154</a>
                     <a href="tel:+2348069452608" className="hover:text-accent">08069452608</a>
                     <a href="tel:+2348054180077" className="hover:text-accent">08054180077</a>
                     <a href="tel:+2347065954551" className="hover:text-accent">07065954551</a>
