@@ -105,7 +105,7 @@ export function Footer() {
                 6PJ-3U + H32, Nnebisi Road, Umuonaje 320242, Asaba, Delta State, Nigeria.
               </p>
               <p className="space-y-1">
-                <a href="tel:+2347039363154" className="hover:text-accent transition-colors">07039363154</a>
+                <a href="tel:+2347033963154" className="hover:text-accent transition-colors">07033963154</a>
                 <br />
                 <a href="tel:+2348069452608" className="hover:text-accent transition-colors">08069452608</a>
                 <br />
