@@ -130,12 +130,22 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-primary-foreground/20 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-primary-foreground/60">© 2025 Bravemind Enterprise. All rights reserved.</p>
-          <div className="flex gap-6 text-sm">
-            <a href="#" className="text-primary-foreground/60 hover:text-accent transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="text-primary-foreground/60 hover:text-accent transition-colors">
-              Terms of Service
+          <div className="flex flex-col items-center md:items-end gap-1">
+            <div className="flex gap-6 text-sm">
+              <a href="#" className="text-primary-foreground/60 hover:text-accent transition-colors">
+                Privacy Policy
+              </a>
+              <a href="#" className="text-primary-foreground/60 hover:text-accent transition-colors">
+                Terms of Service
+              </a>
+            </div>
+            <a
+              href="https://wa.me/2349042714164?text=Hello%2C%20I%20saw%20your%20work%20on%20Bravemind%20Enterprise%20website%20and%20I%20would%20like%20to%20make%20an%20enquiry."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] text-primary-foreground/50 hover:text-primary-foreground transition-colors cursor-pointer"
+            >
+              Designed by DEVI Software Solution
             </a>
           </div>
         </div>
